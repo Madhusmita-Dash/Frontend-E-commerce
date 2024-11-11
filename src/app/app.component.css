@@ -1,0 +1,32 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    height: 64px; /* Default height for Angular Material toolbars */
+    padding: 0 16px; /* Horizontal padding */
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem; /* Increase brand font size */
+    font-weight: bold; /* Make brand text bold */
+    color: white; /* Change brand text color */
+  }
+  
+  .spacer {
+    flex: 1; /* Create space between brand and buttons */
+  }
+  
+  button {
+    font-size: 1rem; /* Set button font size */
+    margin-left: 16px; /* Add space between buttons */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+  }
+  
+  button:hover {
+    background-color: rgba(146, 7, 7, 0.2); /* Light hover effect */
+  }
+  
+  .active {
+    font-weight: bold; /* Highlight active button */
+    color: yellow; /* Change color of active button */
+  }
+  
