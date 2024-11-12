@@ -1,75 +1,93 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth/auth.service'; // Ensure you import AuthService
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
   signupForm!: FormGroup;
-  hidePassword: boolean = true; // This controls the password visibility
+  hidePassword = true;
 
   constructor(
     private fb: FormBuilder,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router,
-    private authService: AuthService // Inject AuthService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Initialize the signup form with validations
-    this.signupForm = this.fb.group({
-      name: [null, [Validators.required]],
-      email: [null, [Validators.required, Validators.email]],
-      password: [null, [Validators.required, Validators.minLength(6)]],
-      confirmPassword: [null, [Validators.required]]
-    }, { validators: this.passwordMatchValidator }); // Custom validator to match passwords
+    this.signupForm = this.fb.group(
+      {
+        name: [null, [Validators.required]],
+        email: [null, [Validators.required, Validators.email]],
+        password: [null, [Validators.required, Validators.minLength(6)]],
+        confirmPassword: [null, [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
-  // Password match validation
-  passwordMatchValidator(control: FormGroup) {
-    const password = control.get('password')?.value;
-    const confirmPassword = control.get('confirmPassword')?.value;
+  passwordMatchValidator(formGroup: FormGroup): null | object {
+    const password = formGroup.get('password')?.value;
+    const confirmPassword = formGroup.get('confirmPassword')?.value;
     if (password && confirmPassword && password !== confirmPassword) {
+      formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
+    } else {
+      return null;
     }
-    return null;
   }
 
-  // Toggle password visibility
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
 
-  // Handle form submission
   onSubmit(): void {
     this.signupForm.markAllAsTouched();
     if (this.signupForm.invalid) {
       return;
     }
-  
-    console.log("Submitting form with values:", this.signupForm.value); // Debugging output
-  
-    this.authService.register(this.signupForm.value).subscribe(
+
+    const signupRequest = {
+      name: this.signupForm.value.name,
+      email: this.signupForm.value.email,
+      password: this.signupForm.value.password,
+    };
+
+    this.authService.register(signupRequest).subscribe(
       (response) => {
-        this.snackBar.open('Signup successful!', 'Close', { duration: 3000 });
+        this.snackBar.open('Signup successful!', 'Close', {
+          duration: 3000,
+        });
         this.router.navigateByUrl('/login');
       },
       (error) => {
         console.error(error);
-        this.snackBar.open('Signup failed. Please try again.', 'Close', { duration: 3000, panelClass: 'error-snacker' });
+        this.snackBar.open(
+          'Signup failed. Please try again.',
+          'Close',
+          { duration: 3000, panelClass: 'error-snacker' }
+        );
       }
     );
   }
-  
 
-  // Getter methods for easier form control validation checks
-  get name() { return this.signupForm.get('name'); }
-  get email() { return this.signupForm.get('email'); }
-  get password() { return this.signupForm.get('password'); }
-  get confirmPassword() { return this.signupForm.get('confirmPassword'); }
+ 
+  get name() {
+    return this.signupForm.get('name');
+  }
+  get email() {
+    return this.signupForm.get('email');
+  }
+  get password() {
+    return this.signupForm.get('password');
+  }
+  get confirmPassword() {
+    return this.signupForm.get('confirmPassword');
+  }
 }
