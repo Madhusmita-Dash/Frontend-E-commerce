@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';  // Corrected import
+import { Router } from '@angular/router';  
 import { AdminService } from '../../service/admin.service';
 
 @Component({
   selector: 'app-post-category',
   templateUrl: './post-category.component.html',
-  styleUrls: ['./post-category.component.css']  // Corrected property name
+  styleUrls: ['./post-category.component.css']  
 })
 export class PostCategoryComponent implements OnInit {
   categoryForm!: FormGroup;
@@ -37,7 +37,7 @@ export class PostCategoryComponent implements OnInit {
         } else {
           this.snackBar.open(res.message, 'close', {
             duration: 5000,
-            panelClass: 'error-snackbar'  // Corrected property name
+            panelClass: 'error-snackbar'  
           });
         }
       });
