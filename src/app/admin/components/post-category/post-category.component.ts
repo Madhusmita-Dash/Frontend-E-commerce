@@ -37,7 +37,7 @@ export class PostCategoryComponent implements OnInit {
         } else {
           this.snackBar.open(res.message, 'close', {
             duration: 5000,
-            panelClass: 'error-snackbar'  // Corrected property name
+            panelClass: 'error-snackbar'  
           });
         }
       });
