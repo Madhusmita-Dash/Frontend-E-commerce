@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
+//checking
   submitForm(): void {
     if (this.searchProductForm.valid) {
       this.products = [];
